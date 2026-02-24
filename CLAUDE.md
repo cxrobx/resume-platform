@@ -162,7 +162,33 @@ Add to `api/routers/files.py` or create a new router file in `api/routers/`. Reg
 ### New UI panel or component
 Add to `web/components/Editor/`. Import in `index.tsx`. All fetch calls go through `web/lib/api.ts` — add new typed wrappers there, not inline in components.
 
-## NAS Deploy
+## Git Workflow (local ↔ NAS sync)
+
+Remote: `nas` → `ssh://cx@192.168.4.22:2233/volume2/docker/git/resume-platform.git`
+
+```bash
+git push nas main
+```
+
+The `post-receive` hook on the NAS handles deployment automatically:
+- **Content-only changes** (`resume/src/`, `resume/assets/`): checked out immediately, live via volume mount — no rebuild.
+- **Code changes** (`api/`, `web/`, `compose.yaml`): containers are rebuilt and restarted automatically.
+
+```bash
+# Typical resume edit workflow:
+git add resume/src/resume.typ
+git commit -m "update work experience"
+git push nas main          # live on NAS in seconds, no rebuild
+```
+
+```bash
+# Code change workflow (triggers rebuild, takes ~2 min):
+git add api/ web/
+git commit -m "add new API endpoint"
+git push nas main
+```
+
+## NAS Deploy (first time / from scratch)
 
 ```bash
 # 1. Build images (must be done on NAS or CI — not Apple Silicon)
