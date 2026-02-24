@@ -162,6 +162,12 @@ Add to `api/routers/files.py` or create a new router file in `api/routers/`. Reg
 ### New UI panel or component
 Add to `web/components/Editor/`. Import in `index.tsx`. All fetch calls go through `web/lib/api.ts` — add new typed wrappers there, not inline in components.
 
+## Slash Commands
+
+| Command | Description |
+|---------|-------------|
+| `/deploy [message]` | Stage, commit, and push to NAS. Hook auto-detects content-only vs code changes. |
+
 ## Git Workflow (local ↔ NAS sync)
 
 Remote: `nas` → `ssh://cx@192.168.4.22:2233/volume2/docker/git/resume-platform.git`
