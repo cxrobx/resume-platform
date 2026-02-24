@@ -1,0 +1,5 @@
+TYPST_PATH=/usr/local/bin/typst
+RESUME_ROOT=/data/resume
+API_PORT=18850
+WEB_PORT=18851
+NEXT_PUBLIC_API_URL=http://192.168.4.22:18850

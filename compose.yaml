@@ -1,0 +1,36 @@
+name: resume-platform
+
+services:
+  resume-api:
+    build: ./api
+    container_name: resume_api
+    ports:
+      - "${API_PORT:-18850}:8001"
+    environment:
+      - TYPST_PATH=/usr/local/bin/typst
+      - RESUME_ROOT=/data/resume
+      - API_PORT=8001
+    volumes:
+      - ./resume:/data/resume
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8001/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  resume-web:
+    build:
+      context: ./web
+      args:
+        NEXT_PUBLIC_API_URL: http://192.168.4.22:${API_PORT:-18850}
+    container_name: resume_web
+    ports:
+      - "${WEB_PORT:-18851}:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://192.168.4.22:${API_PORT:-18850}
+    depends_on:
+      resume-api:
+        condition: service_healthy
+    restart: unless-stopped

@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+.next/
+
+# Python
+api/.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Build output
+resume/build/
+
+# Local env (NAS env is tracked)
+.env
+
+# Misc
+.DS_Store
+resumes/
