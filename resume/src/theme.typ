@@ -16,4 +16,3 @@
   left:   0.3in,
   right:  0.3in,
 )
-
