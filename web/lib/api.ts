@@ -20,6 +20,13 @@ export async function fetchTree(): Promise<FileNode> {
   return res.json();
 }
 
+export async function statFile(path: string): Promise<number> {
+  const res = await fetch(`${BASE}/files/stat?path=${encodeURIComponent(path)}`);
+  if (!res.ok) throw new Error(`Failed to stat ${path}`);
+  const data = await res.json();
+  return data.mtime as number;
+}
+
 export async function readFile(path: string): Promise<string> {
   const res = await fetch(`${BASE}/files/read?path=${encodeURIComponent(path)}`);
   if (!res.ok) throw new Error(`Failed to read ${path}`);

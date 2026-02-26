@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { compile, writeFile, pdfUrl, CompileResult } from "./api";
 
 export type CompileStatus = "idle" | "saving" | "compiling" | "success" | "error";
@@ -9,6 +9,9 @@ export function useCompiler(filePath: string | null) {
   const [status, setStatus]       = useState<CompileStatus>("idle");
   const [result, setResult]       = useState<CompileResult | null>(null);
   const [pdfSrc, setPdfSrc]       = useState<string>("");
+
+  // Initialize PDF on mount (client-only — avoids SSR/hydration timestamp mismatch)
+  useEffect(() => { setPdfSrc(pdfUrl()); }, []);
   const debounceRef               = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const triggerCompile = useCallback(
@@ -58,5 +61,25 @@ export function useCompiler(filePath: string | null) {
     [triggerCompile]
   );
 
-  return { status, result, pdfSrc, scheduleCompile, compileNow };
+  // Compile without writing — used by the external-change poller so it doesn't
+  // touch the file mtime and cause a detection loop.
+  const compileOnly = useCallback(async () => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    setStatus("compiling");
+    try {
+      const r = await compile();
+      setResult(r);
+      if (r.success) {
+        setPdfSrc(pdfUrl());
+        setStatus("success");
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+      setResult({ success: false, stderr: "Compile request failed", duration_ms: 0, pdf_url: null });
+    }
+  }, []);
+
+  return { status, result, pdfSrc, scheduleCompile, compileNow, compileOnly };
 }

@@ -29,7 +29,7 @@
   block(width: 100%, {
     text(weight: "bold")[#company]
     h(1fr)
-    [#info]
+    text(size: 9pt)[#info]
     if title != "" or date != "" {
       linebreak()
       text(style: "italic")[#title]
@@ -37,20 +37,20 @@
       text(style: "italic")[#date]
     }
   })
-  v(8pt)   // restore original spacing (less concise / more readable)
+  v(7pt)
   block(width: 100%, body)
-  v(14pt)  // restore original spacing
+  v(10pt)
 }
 
 // ── Bullet list ───────────────────────────────────────────────────
 #let bullets(..items) = {
   set text(font: body-font, size: body-size)
-  set par(leading: 0.6em, spacing: 0pt, justify: true)
+  set par(leading: 0.6em, spacing: 0pt, justify: false)
   set list(
     marker: [·],
     indent: 1.5em,
     body-indent: 0.4em,
-    spacing: 8pt,
+    spacing: 5pt,
   )
   block(width: 100%, list(..items.pos()))
 }

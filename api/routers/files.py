@@ -40,6 +40,13 @@ async def file_tree():
     return {"name": "resume", "path": ".", "type": "dir", "children": children}
 
 
+@router.get("/stat")
+async def stat_file(path: str = Query(...)):
+    """Return file modification time without reading content."""
+    target = resolve_read_safe(path)
+    return {"mtime": target.stat().st_mtime}
+
+
 @router.get("/read")
 async def read_file(path: str = Query(...)):
     """Read a file from RESUME_ROOT. path is relative to RESUME_ROOT."""
