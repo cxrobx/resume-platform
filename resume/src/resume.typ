@@ -13,7 +13,7 @@
 // ── Header ────────────────────────────────────────────────────────
 #resume-header(
   name:    "Christopher Robinson",
-  address: "2140 Enon Mill Dr SW | Atlanta, GA 30331",
+  address: "Atlanta, GA / Remote",
   contact: "713-560-1420 | RobinsonChristopher@icloud.com",
 )
 
@@ -89,7 +89,7 @@
 
   #role(
     company: "Artist Advisory",
-    info:    "2025 – Present",
+    info:    "artistadvisory.io · 2025 – Present",
     title:   "AI Music Career Intelligence Platform",
   )[
     #bullets(
@@ -100,7 +100,7 @@
 
   #role(
     company: "PocketBuddy",
-    info:    "2026 – Present",
+    info:    "pocketbuddy.org · 2026 – Present",
     title:   "AI Personal Finance Advisor with Native iOS Companion",
   )[
     #bullets(

@@ -1,0 +1,33 @@
+{
+  "name": "resume-editor",
+  "version": "1.0.0",
+  "description": "Resume Editor — local launcher",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --mac dmg"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.cx.resume-editor",
+    "productName": "Resume Editor",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "loading.html",
+      "error.html"
+    ],
+    "mac": {
+      "target": [{ "target": "dmg", "arch": ["arm64"] }],
+      "category": "public.app-category.productivity"
+    },
+    "dmg": {
+      "title": "Resume Editor"
+    }
+  }
+}

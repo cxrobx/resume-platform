@@ -17,3 +17,15 @@ resume/build/
 # Misc
 .DS_Store
 resumes/
+
+# Launcher
+launcher/node_modules/
+launcher/dist/
+launcher-swift/dist/
+launcher-swift/.DS_Store
+
+# Playwright MCP artifacts
+.playwright-mcp/
+
+# Build info
+web/tsconfig.tsbuildinfo
