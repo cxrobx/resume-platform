@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 ENV TYPST_PATH=/usr/local/bin/typst
-ENV RESUME_ROOT=/data/resume
+ENV RESUMES_BASE=/data/resumes
 ENV API_PORT=8001
 
 EXPOSE 8001

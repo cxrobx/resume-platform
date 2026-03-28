@@ -15,11 +15,11 @@ ENTRY_FILE = "src/resume.typ"
 OUTPUT_FILE = "build/resume.pdf"
 
 
-async def compile_typst() -> dict:
+async def compile_typst(resume: str) -> dict:
     """
     Returns {"success": bool, "stderr": str, "duration_ms": int, "pdf_url": str | None}
     """
-    root = resume_root()
+    root = resume_root(resume)
     entry  = root / ENTRY_FILE
     output = root / OUTPUT_FILE
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -43,14 +43,14 @@ async def compile_typst() -> dict:
             await proc.communicate()
             return {
                 "success": False,
-                "stderr": f"Compile timed out after {COMPILE_TIMEOUT}s",
+                "stderr": "Compile timed out after %ds" % COMPILE_TIMEOUT,
                 "duration_ms": int((time.monotonic() - start) * 1000),
                 "pdf_url": None,
             }
     except FileNotFoundError:
         return {
             "success": False,
-            "stderr": f"Typst not found at {TYPST_PATH!r}. Check TYPST_PATH env var.",
+            "stderr": "Typst not found at %r. Check TYPST_PATH env var." % TYPST_PATH,
             "duration_ms": int((time.monotonic() - start) * 1000),
             "pdf_url": None,
         }
@@ -62,5 +62,5 @@ async def compile_typst() -> dict:
         "success": success,
         "stderr": stderr.decode("utf-8", errors="replace").strip(),
         "duration_ms": duration_ms,
-        "pdf_url": "/files/pdf" if success else None,
+        "pdf_url": "/files/pdf?resume=%s" % resume if success else None,
     }

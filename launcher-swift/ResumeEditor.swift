@@ -92,7 +92,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
         let repo = "\(home)/Projects/resume-platform"
 
         apiProcess = shell(
-            "source .venv/bin/activate && TYPST_PATH=/opt/homebrew/bin/typst RESUME_ROOT=../resume python3 main.py",
+            "source .venv/bin/activate && TYPST_PATH=/opt/homebrew/bin/typst RESUMES_BASE=../resumes python3 main.py",
             cwd: "\(repo)/api"
         )
         webProcess = shell(
@@ -216,12 +216,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate {
 
     private func downloadPDF(from url: URL) {
         let panel = NSSavePanel()
-        panel.nameFieldStringValue = "resume.pdf"
+        let resumeName = URLComponents(url: url, resolvingAgainstBaseURL: false)?
+            .queryItems?.first(where: { $0.name == "resume" })?.value ?? "resume"
+        panel.nameFieldStringValue = "\(resumeName).pdf"
         panel.allowedContentTypes = [UTType.pdf]
         panel.begin { response in
             guard response == .OK, let dest = panel.url else { return }
             URLSession.shared.downloadTask(with: url) { tempURL, _, error in
                 guard let tempURL = tempURL, error == nil else { return }
+                try? FileManager.default.removeItem(at: dest)
                 try? FileManager.default.moveItem(at: tempURL, to: dest)
             }.resume()
         }

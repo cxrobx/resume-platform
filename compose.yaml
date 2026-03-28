@@ -8,10 +8,10 @@ services:
       - "${API_PORT:-18850}:8001"
     environment:
       - TYPST_PATH=/usr/local/bin/typst
-      - RESUME_ROOT=/data/resume
+      - RESUMES_BASE=/data/resumes
       - API_PORT=8001
     volumes:
-      - ./resume:/data/resume
+      - ./resumes:/data/resumes
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8001/health"]
       interval: 15s

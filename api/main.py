@@ -3,16 +3,22 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from services.sandbox import set_resume_root
-from routers import compile, files
+from services.sandbox import set_resumes_base
+from routers import compile, files, resumes
 
-RESUME_ROOT = os.environ.get("RESUME_ROOT", "../resume")
-API_PORT    = int(os.environ.get("API_PORT", 8001))
+RESUMES_BASE = os.environ.get("RESUMES_BASE", "../resumes")
+API_PORT     = int(os.environ.get("API_PORT", 8001))
+
+# Auto-migrate from single-resume layout if needed
+_old_root = os.environ.get("RESUME_ROOT")
+if _old_root and not os.path.isdir(RESUMES_BASE):
+    from migrate import migrate_to_multi_resume
+    migrate_to_multi_resume(_old_root, RESUMES_BASE)
 
 # Initialise sandbox before any route can run
-set_resume_root(RESUME_ROOT)
+set_resumes_base(RESUMES_BASE)
 
-app = FastAPI(title="Resume Platform API", version="1.0.0")
+app = FastAPI(title="Resume Platform API", version="2.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -23,6 +29,7 @@ app.add_middleware(
 
 app.include_router(compile.router)
 app.include_router(files.router)
+app.include_router(resumes.router)
 
 
 @app.get("/health")

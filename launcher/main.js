@@ -68,7 +68,7 @@ async function start() {
 
   // Start API server
   apiProc = sh(
-    `source .venv/bin/activate && TYPST_PATH=/opt/homebrew/bin/typst RESUME_ROOT=../resume python3 main.py`,
+    `source .venv/bin/activate && TYPST_PATH=/opt/homebrew/bin/typst RESUMES_BASE=../resumes python3 main.py`,
     path.join(REPO, 'api')
   );
 

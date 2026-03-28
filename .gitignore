@@ -9,14 +9,16 @@ __pycache__/
 *.pyo
 
 # Build output
-resume/build/
+resumes/*/build/
 
 # Local env (NAS env is tracked)
 .env
 
 # Misc
 .DS_Store
-resumes/
+
+# Legacy archived PDFs in resumes root
+resumes/*.pdf
 
 # Launcher
 launcher/node_modules/
